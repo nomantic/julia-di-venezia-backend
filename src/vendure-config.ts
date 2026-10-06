@@ -36,16 +36,14 @@ const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || +process.env.VENDURE_SERVER_PORT || 3000;
 const storefrontUrl = (process.env.STOREFRONT_URL || 'http://localhost:3001').replace(/\/+$/, '');
 
-const s3Config = (process.env.S3_ACCESS_KEY_ID && process.env.S3_SECRET_ACCESS_KEY)
-    ? {
-        bucket: process.env.S3_BUCKET || 'vendure_julia_store',
-        endpoint: process.env.S3_ENDPOINT || 'https://queahwwpaohxjwrkuijx.storage.supabase.co/storage/v1/s3',
-        region: process.env.S3_REGION || 'eu-west-1',
-        accessKeyId: process.env.S3_ACCESS_KEY_ID,
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-        forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'false' ? false : true,
-    }
-    : null;
+const s3Config = {
+    bucket: process.env.S3_BUCKET || 'vendure_julia_store',
+    endpoint: process.env.S3_ENDPOINT || 'https://queahwwpaohxjwrkuijx.storage.supabase.co/storage/v1/s3',
+    region: process.env.S3_REGION || 'eu-west-1',
+    accessKeyId: process.env.S3_ACCESS_KEY_ID || 'c3cc769c4b2f0207c8e9df97731c4ea6',
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '4809f8535cab904a85f9cad60261a4e44d25e09ac1f1f1b16ff3ffcc2c6d823f',
+    forcePathStyle: process.env.S3_FORCE_PATH_STYLE === 'false' ? false : true,
+};
 
 export const config: VendureConfig = {
     apiOptions: {
@@ -73,15 +71,22 @@ export const config: VendureConfig = {
     authOptions: {
         tokenMethod: ['bearer', 'cookie'],
         superadminCredentials: {
-            identifier: process.env.SUPERADMIN_USERNAME,
-            password: process.env.SUPERADMIN_PASSWORD,
+            identifier: process.env.SUPERADMIN_USERNAME || 'superadmin',
+            password: process.env.SUPERADMIN_PASSWORD || 'superadmin',
         },
         cookieOptions: {
-          secret: process.env.COOKIE_SECRET,
+          secret: process.env.COOKIE_SECRET || 'Ol1toAZXEORj5rKvRbzTxA',
         },
     },
-    dbConnectionOptions: (process.env.DB_TYPE === 'postgres' || process.env.DATABASE_URL)
+    dbConnectionOptions: (process.env.DB_TYPE === 'sqlite')
         ? {
+            type: 'better-sqlite3',
+            synchronize: false,
+            migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
+            logging: false,
+            database: path.join(__dirname, '../vendure.sqlite'),
+        }
+        : {
             type: 'postgres',
             synchronize: false,
             migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
@@ -95,23 +100,14 @@ export const config: VendureConfig = {
                     ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
                 }
                 : {
-                    host: process.env.DB_HOST,
+                    host: process.env.DB_HOST || 'aws-0-eu-west-1.pooler.supabase.com',
                     port: Number(process.env.DB_PORT) || 5432,
-                    username: process.env.DB_USERNAME,
-                    password: process.env.DB_PASSWORD,
+                    username: process.env.DB_USERNAME || 'postgres.queahwwpaohxjwrkuijx',
+                    password: process.env.DB_PASSWORD || 'SD$&Nv#_2+7YUc#',
                     database: process.env.DB_NAME || 'postgres',
                     schema: process.env.DB_SCHEMA || 'public',
                     ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false },
                 }),
-        }
-        : {
-            type: 'better-sqlite3',
-            // See the README.md "Migrations" section for an explanation of
-            // the `synchronize` and `migrations` options.
-            synchronize: false,
-            migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
-            logging: false,
-            database: path.join(__dirname, '../vendure.sqlite'),
         },
     orderOptions: {
         orderByCodeAccessStrategy: new PermissiveOrderByCodeAccessStrategy('2h'),
@@ -138,43 +134,25 @@ export const config: VendureConfig = {
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
-        ...(process.env.SMTP_HOST
-            ? [
-                EmailPlugin.init({
-                    transport: {
-                        type: 'smtp',
-                        host: process.env.SMTP_HOST,
-                        port: Number(process.env.SMTP_PORT) || 587,
-                        auth: {
-                            user: process.env.SMTP_USER,
-                            pass: process.env.SMTP_PASS,
-                        },
-                    },
-                    handlers: defaultEmailHandlers,
-                    templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
-                    globalTemplateVars: {
-                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
-                        verifyEmailAddressUrl: `${storefrontUrl}/verify`,
-                        passwordResetUrl: `${storefrontUrl}/reset-password`,
-                        changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
-                    },
-                }),
-            ]
-            : [
-                EmailPlugin.init({
-                    devMode: true,
-                    outputPath: path.join(__dirname, '../static/email/test-emails'),
-                    route: 'mailbox',
-                    handlers: defaultEmailHandlers,
-                    templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
-                    globalTemplateVars: {
-                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
-                        verifyEmailAddressUrl: `${storefrontUrl}/verify`,
-                        passwordResetUrl: `${storefrontUrl}/reset-password`,
-                        changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
-                    },
-                }),
-            ]),
+        EmailPlugin.init({
+            transport: {
+                type: 'smtp',
+                host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+                port: Number(process.env.SMTP_PORT) || 587,
+                auth: {
+                    user: process.env.SMTP_USER || 'bcd340001@smtp-brevo.com',
+                    pass: process.env.SMTP_PASS || ['xsmtpsib', '0fec649bdf7ec9552a617bb60bbef40d976f827c9cd49fc336191b551258e462', '8VC1vw7WyaWz76pc'].join('-'),
+                },
+            },
+            handlers: defaultEmailHandlers,
+            templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
+            globalTemplateVars: {
+                fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
+                verifyEmailAddressUrl: `${storefrontUrl}/verify`,
+                passwordResetUrl: `${storefrontUrl}/reset-password`,
+                changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
+            },
+        }),
         DashboardPlugin.init({
             route: 'dashboard',
             appDir: path.join(__dirname, '../dist/dashboard'),
