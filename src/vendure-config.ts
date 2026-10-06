@@ -138,10 +138,9 @@ export const config: VendureConfig = {
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
-        EmailPlugin.init({
-            devMode: !process.env.SMTP_HOST,
-            ...(process.env.SMTP_HOST
-                ? {
+        ...(process.env.SMTP_HOST
+            ? [
+                EmailPlugin.init({
                     transport: {
                         type: 'smtp',
                         host: process.env.SMTP_HOST,
@@ -151,20 +150,31 @@ export const config: VendureConfig = {
                             pass: process.env.SMTP_PASS,
                         },
                     },
-                }
-                : {
+                    handlers: defaultEmailHandlers,
+                    templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
+                    globalTemplateVars: {
+                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
+                        verifyEmailAddressUrl: `${storefrontUrl}/verify`,
+                        passwordResetUrl: `${storefrontUrl}/reset-password`,
+                        changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
+                    },
+                }),
+            ]
+            : [
+                EmailPlugin.init({
+                    devMode: true,
                     outputPath: path.join(__dirname, '../static/email/test-emails'),
                     route: 'mailbox',
+                    handlers: defaultEmailHandlers,
+                    templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
+                    globalTemplateVars: {
+                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
+                        verifyEmailAddressUrl: `${storefrontUrl}/verify`,
+                        passwordResetUrl: `${storefrontUrl}/reset-password`,
+                        changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
+                    },
                 }),
-            handlers: defaultEmailHandlers,
-            templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
-            globalTemplateVars: {
-                fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
-                verifyEmailAddressUrl: `${storefrontUrl}/verify`,
-                passwordResetUrl: `${storefrontUrl}/reset-password`,
-                changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
-            },
-        }),
+            ]),
         DashboardPlugin.init({
             route: 'dashboard',
             appDir: path.join(__dirname, '../dist/dashboard'),
