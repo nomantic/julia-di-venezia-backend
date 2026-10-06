@@ -49,6 +49,7 @@ const s3Config = (process.env.S3_ACCESS_KEY_ID && process.env.S3_SECRET_ACCESS_K
 
 export const config: VendureConfig = {
     apiOptions: {
+        hostname: '0.0.0.0',
         port: serverPort,
         adminApiPath: 'admin-api',
         shopApiPath: 'shop-api',
