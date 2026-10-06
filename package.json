@@ -1,0 +1,43 @@
+{
+  "name": "julia-di-venezia",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:server": "vendure dev server",
+    "dev:worker": "vendure dev worker",
+    "dev:dashboard": "vendure dev dashboard",
+    "dev:storefront": "npm run dev --prefix storefront",
+    "dev": "vendure dev all --no-reload",
+    "populate:art": "ts-node src/populate-art.ts",
+    "sync:assets:s3": "ts-node src/sync-assets-to-s3.ts",
+    "build": "vendure build all",
+    "build:server": "vendure build server",
+    "build:worker": "vendure build worker",
+    "build:dashboard": "vendure build dashboard",
+    "start:server": "node ./dist/index.js",
+    "start:worker": "node ./dist/index-worker.js",
+    "start": "vendure start all"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
+    "@aws-sdk/lib-storage": "^3.1146.0",
+    "@vendure-community/stripe-plugin": "^1.0.0",
+    "@vendure/asset-server-plugin": "3.7.3",
+    "@vendure/core": "3.7.3",
+    "@vendure/dashboard": "3.7.3",
+    "@vendure/email-plugin": "3.7.3",
+    "@vendure/graphiql-plugin": "3.7.3",
+    "better-sqlite3": "12.11.1",
+    "dotenv": "18.0.5",
+    "pg": "^8.23.1",
+    "stripe": "^13.11.0"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^3.0.1",
+    "@types/pg": "^8.23.1",
+    "@vendure/cli": "3.7.3",
+    "ts-node": "10.9.2",
+    "typescript": "5.8.2",
+    "vite": "7.3.6"
+  }
+}

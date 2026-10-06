@@ -1,0 +1,194 @@
+{
+  "defaultLanguage": "en",
+  "defaultZone": "Europe",
+  "roles": [
+    {
+      "code": "administrator",
+      "description": "Administrator",
+      "permissions": [
+        "CreateCatalog",
+        "ReadCatalog",
+        "UpdateCatalog",
+        "DeleteCatalog",
+        "CreateSettings",
+        "ReadSettings",
+        "UpdateSettings",
+        "DeleteSettings",
+        "CreateCustomer",
+        "ReadCustomer",
+        "UpdateCustomer",
+        "DeleteCustomer",
+        "CreateCustomerGroup",
+        "ReadCustomerGroup",
+        "UpdateCustomerGroup",
+        "DeleteCustomerGroup",
+        "CreateOrder",
+        "ReadOrder",
+        "UpdateOrder",
+        "DeleteOrder",
+        "CreateSystem",
+        "ReadSystem",
+        "UpdateSystem",
+        "DeleteSystem"
+      ]
+    },
+    {
+      "code": "order-manager",
+      "description": "Order manager",
+      "permissions": [
+        "CreateOrder",
+        "ReadOrder",
+        "UpdateOrder",
+        "DeleteOrder",
+        "ReadCustomer",
+        "ReadPaymentMethod",
+        "ReadShippingMethod",
+        "ReadPromotion",
+        "ReadCountry",
+        "ReadZone"
+      ]
+    },
+    {
+      "code": "inventory-manager",
+      "description": "Inventory manager",
+      "permissions": [
+        "CreateCatalog",
+        "ReadCatalog",
+        "UpdateCatalog",
+        "DeleteCatalog",
+        "CreateTag",
+        "ReadTag",
+        "UpdateTag",
+        "DeleteTag",
+        "ReadCustomer"
+      ]
+    }
+  ],
+  "taxRates": [
+    {
+      "name": "Standard Tax",
+      "percentage": 22
+    },
+    {
+      "name": "Reduced Tax",
+      "percentage": 10
+    },
+    {
+      "name": "Zero Tax",
+      "percentage": 0
+    }
+  ],
+  "shippingMethods": [
+    {
+      "name": "Standard Courier (Italia & Europa)",
+      "price": 800
+    },
+    {
+      "name": "Express Courier - Assicurato (Arte & Vetro)",
+      "price": 1800
+    },
+    {
+      "name": "Worldwide International Priority Art Shipping",
+      "price": 3500
+    }
+  ],
+  "paymentMethods": [
+    {
+      "name": "Standard Payment (Credit Card / Wire / Cash on Delivery)",
+      "handler": {
+        "code": "dummy-payment-handler",
+        "arguments": [
+          {
+            "name": "automaticSettle",
+            "value": "false"
+          }
+        ]
+      }
+    }
+  ],
+  "collections": [
+    {
+      "name": "Murano Glass Art",
+      "filters": [
+        {
+          "code": "facet-value-filter",
+          "args": {
+            "facetValueNames": [
+              "Murano Glass"
+            ],
+            "containsAny": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Venetian Carnival Masks",
+      "filters": [
+        {
+          "code": "facet-value-filter",
+          "args": {
+            "facetValueNames": [
+              "Venetian Masks"
+            ],
+            "containsAny": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Paintings & Watercolors",
+      "filters": [
+        {
+          "code": "facet-value-filter",
+          "args": {
+            "facetValueNames": [
+              "Paintings & Watercolors"
+            ],
+            "containsAny": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Venetian Leather & Marbled Paper",
+      "filters": [
+        {
+          "code": "facet-value-filter",
+          "args": {
+            "facetValueNames": [
+              "Venetian Leather & Marbled Paper"
+            ],
+            "containsAny": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Artisanal Ceramics & Majolica",
+      "filters": [
+        {
+          "code": "facet-value-filter",
+          "args": {
+            "facetValueNames": [
+              "Artisanal Ceramics & Majolica"
+            ],
+            "containsAny": false
+          }
+        }
+      ]
+    }
+  ],
+  "countries": [
+    { "code": "IT", "name": "Italy", "zone": "Europe" },
+    { "code": "FR", "name": "France", "zone": "Europe" },
+    { "code": "DE", "name": "Germany", "zone": "Europe" },
+    { "code": "ES", "name": "Spain", "zone": "Europe" },
+    { "code": "GB", "name": "United Kingdom", "zone": "Europe" },
+    { "code": "CH", "name": "Switzerland", "zone": "Europe" },
+    { "code": "AT", "name": "Austria", "zone": "Europe" },
+    { "code": "US", "name": "United States", "zone": "Americas" },
+    { "code": "CA", "name": "Canada", "zone": "Americas" },
+    { "code": "JP", "name": "Japan", "zone": "Asia" },
+    { "code": "AU", "name": "Australia", "zone": "Oceania" }
+  ]
+}

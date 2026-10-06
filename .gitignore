@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Production output
+dist/
+build/
+admin-ui/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Vendure generated files & SQLite databases
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.vendure/
+
+# Static uploads & local media caches
+static/assets/
+static/email/test-emails/
+
+# Temporary and local scratch data
+scratch/
+.tanstack/
+.agents/
+*.log
+
+# Separate storefront repository
+storefront/
+
+# OS files
+.DS_Store
+Thumbs.db
