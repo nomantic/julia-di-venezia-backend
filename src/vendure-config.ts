@@ -75,10 +75,10 @@ export const config: VendureConfig = {
         tokenMethod: ['bearer', 'cookie'],
         superadminCredentials: {
             identifier: process.env.SUPERADMIN_USERNAME || 'superadmin',
-            password: process.env.SUPERADMIN_PASSWORD || 'superadmin',
+            password: process.env.SUPERADMIN_PASSWORD || (IS_DEV ? 'superadmin' : 'JuliaVenice2026!SecureAdminPass'),
         },
         cookieOptions: {
-          secret: process.env.COOKIE_SECRET || 'secret-change-in-production',
+          secret: process.env.COOKIE_SECRET || 'JuliaVenice2026!SecretKeyForAuthCookies',
         },
     },
     dbConnectionOptions: (process.env.DB_TYPE === 'postgres' || process.env.DATABASE_URL)
