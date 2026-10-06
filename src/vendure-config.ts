@@ -139,13 +139,27 @@ export const config: VendureConfig = {
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
         EmailPlugin.init({
-            devMode: true,
-            outputPath: path.join(__dirname, '../static/email/test-emails'),
-            route: 'mailbox',
+            devMode: !process.env.SMTP_HOST,
+            ...(process.env.SMTP_HOST
+                ? {
+                    transport: {
+                        type: 'smtp',
+                        host: process.env.SMTP_HOST,
+                        port: Number(process.env.SMTP_PORT) || 587,
+                        auth: {
+                            user: process.env.SMTP_USER,
+                            pass: process.env.SMTP_PASS,
+                        },
+                    },
+                }
+                : {
+                    outputPath: path.join(__dirname, '../static/email/test-emails'),
+                    route: 'mailbox',
+                }),
             handlers: defaultEmailHandlers,
             templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
             globalTemplateVars: {
-                fromAddress: '"Julia di venezia" <orders@juliadivenezia.com>',
+                fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
                 verifyEmailAddressUrl: `${storefrontUrl}/verify`,
                 passwordResetUrl: `${storefrontUrl}/reset-password`,
                 changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
