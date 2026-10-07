@@ -152,7 +152,7 @@ export const config: VendureConfig = {
                     handlers: defaultEmailHandlers,
                     templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
                     globalTemplateVars: {
-                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
+                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <support@conversery.com>',
                         verifyEmailAddressUrl: `${storefrontUrl}/verify`,
                         passwordResetUrl: `${storefrontUrl}/reset-password`,
                         changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
@@ -167,7 +167,7 @@ export const config: VendureConfig = {
                     handlers: defaultEmailHandlers,
                     templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
                     globalTemplateVars: {
-                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <orders@juliadivenezia.com>',
+                        fromAddress: process.env.EMAIL_FROM_ADDRESS || '"Julia di venezia" <support@conversery.com>',
                         verifyEmailAddressUrl: `${storefrontUrl}/verify`,
                         passwordResetUrl: `${storefrontUrl}/reset-password`,
                         changeEmailAddressUrl: `${storefrontUrl}/account/verify-email`,
