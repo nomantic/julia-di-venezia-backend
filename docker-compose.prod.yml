@@ -1,0 +1,29 @@
+services:
+  vendure-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: julia-vendure-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PORT=8080
+      - APP_ENV=prod
+      - CORS_ORIGINS=https://julia-di-venezia-storefront--vendurestorefront.europe-west4.hosted.app
+      - STOREFRONT_URL=https://julia-di-venezia-storefront--vendurestorefront.europe-west4.hosted.app
+    ports:
+      # Expose port 8080 on the host (or change left side to 80 if you want direct HTTP without a reverse proxy)
+      - "8080:8080"
+    volumes:
+      # Persist local uploads/assets directory if ever saved locally instead of S3
+      - vendure_assets:/usr/src/app/static/assets
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  vendure_assets:
+    driver: local
