@@ -12,8 +12,8 @@ services:
     environment:
       - PORT=8080
       - APP_ENV=prod
-      - CORS_ORIGINS=http://15.160.209.193:3000,http://localhost:3000,https://julia-di-venezia-storefront--vendurestorefront.europe-west4.hosted.app
-      - STOREFRONT_URL=http://15.160.209.193:3000
+      - CORS_ORIGINS=https://julia-di-venezia-storefront--vendurestorefront.europe-west4.hosted.app,http://15.160.209.193:3000,http://localhost:3000
+      - STOREFRONT_URL=https://julia-di-venezia-storefront--vendurestorefront.europe-west4.hosted.app
     ports:
       - "8080:8080"
     volumes:
