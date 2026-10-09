@@ -3,7 +3,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: julia-vendure-backend
+    image: julia-vendure-app:latest
+    container_name: julia-vendure-server
+    command: npm run start:server
     restart: unless-stopped
     env_file:
       - .env
@@ -23,6 +25,25 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  vendure-worker:
+    image: julia-vendure-app:latest
+    container_name: julia-vendure-worker
+    command: npm run start:worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - APP_ENV=prod
+    volumes:
+      - vendure_assets:/usr/src/app/static/assets
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - vendure-server
 
 volumes:
   vendure_assets:
