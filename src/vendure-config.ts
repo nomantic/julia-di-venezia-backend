@@ -179,7 +179,7 @@ export const config: VendureConfig = {
             ]),
         DashboardPlugin.init({
             route: 'dashboard',
-            appDir: path.join(__dirname, '../dist/dashboard'),
+            appDir: path.join(process.cwd(), 'dist/dashboard'),
         }),
         StripePlugin.init({
             storeCustomersInStripe: false,

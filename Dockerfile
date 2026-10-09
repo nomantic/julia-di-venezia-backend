@@ -4,8 +4,9 @@ WORKDIR /usr/src/app
 
 COPY package.json package-lock.json ./
 RUN npm ci
+
 COPY . .
-RUN npm run build
+RUN npm run build:server && npm run build:worker
 
 ENV PORT=8080
 EXPOSE 8080

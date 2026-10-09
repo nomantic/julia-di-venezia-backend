@@ -2,7 +2,8 @@
 node_modules/
 
 # Production output
-dist/
+dist/*
+!dist/dashboard/
 build/
 admin-ui/
 
